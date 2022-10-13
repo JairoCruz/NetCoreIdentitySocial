@@ -16,6 +16,9 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 var configuration = builder.Configuration;
 
+// For setup secrets
+// https://learn.microsoft.com/es-mx/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows#enable-secret-storage 
+
 
 // Authentication with Google
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
@@ -30,12 +33,14 @@ builder.Services.AddAuthentication().AddFacebook(facebookOptions =>
 {
     facebookOptions.AppId = configuration["Authentication:Facebook:AppId"];
     facebookOptions.AppSecret = configuration["Authentication:Facebook:AppSecret"];
-})
-    .AddMicrosoftAccount(microsoftOptions => 
-    {
-        microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
-        microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
-    });
+});
+
+// Authentication with Microsoft
+builder.Services.AddAuthentication().AddMicrosoftAccount(microsoftOptions => 
+{
+    microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
+    microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
+});
 
 var app = builder.Build();
 
